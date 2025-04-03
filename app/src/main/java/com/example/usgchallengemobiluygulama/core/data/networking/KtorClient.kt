@@ -15,6 +15,7 @@ object KtorClient {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
+                    coerceInputValues = true
                 })
             }
             install(Logging) {

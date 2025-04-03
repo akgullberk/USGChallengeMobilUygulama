@@ -1,29 +1,46 @@
 package com.example.usgchallengemobiluygulama.features.feature_splash.presentation
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.usgchallengemobiluygulama.core.navigation.NavigationEvent
 import com.example.usgchallengemobiluygulama.core.navigation.NavigationManager
 import com.example.usgchallengemobiluygulama.core.navigation.Screen
 import com.example.usgchallengemobiluygulama.core.presentation.util.BaseViewModel
-import kotlinx.coroutines.delay
+import com.example.usgchallengemobiluygulama.features.feature_splash.domain.usecase.GetInitialCitiesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.example.usgchallengemobiluygulama.core.domain.util.Result
 
 class SplashViewModel(
-    private val navigationManager: NavigationManager
+    private val navigationManager: NavigationManager,
+    private val getInitialCitiesUseCase: GetInitialCitiesUseCase
 ) : BaseViewModel() {
     private val _state = MutableStateFlow(SplashState())
     val state = _state.asStateFlow()
 
     init {
-        startSplashTimer()
+        fetchCities()
     }
 
-    private fun startSplashTimer() {
+    private fun fetchCities() {
         viewModelScope.launch {
-            delay(2000) // 2 saniye bekle
-            navigateToHome()
+            _state.value = state.value.copy(isLoading = true)
+            when (val result = getInitialCitiesUseCase()) {
+                is Result.Success -> {
+                    Log.d("SplashViewModel", "Cities: ${result.data}")
+                    _state.value = state.value.copy(
+                        isLoading = false,
+                        cities = result.data.data
+                    )
+                    navigateToHome()
+                }
+                is Result.Error -> {
+                    _state.value = state.value.copy(isLoading = false)
+                    handleError(result.exception)
+                }
+                else -> Unit
+            }
         }
     }
 
