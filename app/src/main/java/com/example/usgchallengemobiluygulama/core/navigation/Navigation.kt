@@ -7,10 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
 import com.example.usgchallengemobiluygulama.features.feature_splash.presentation.SplashScreen
 import com.example.usgchallengemobiluygulama.features.feature_home.presentation.HomeScreen
 import com.example.usgchallengemobiluygulama.features.feature_splash.presentation.SplashViewModel
 import com.example.usgchallengemobiluygulama.features.feature_favorites.presentation.FavoritesScreen
+import com.example.usgchallengemobiluygulama.features.feature_detail.presentation.DetailScreen
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
@@ -52,6 +55,15 @@ fun Navigation(navController: NavHostController) {
         
         composable(route = Screen.Favorites.route) {
             FavoritesScreen()
+        }
+        
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(
+                navArgument("locationId") { type = NavType.IntType }
+            )
+        ) {
+            DetailScreen(it)
         }
     }
 } 
