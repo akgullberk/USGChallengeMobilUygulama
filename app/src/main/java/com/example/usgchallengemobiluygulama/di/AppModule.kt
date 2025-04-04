@@ -21,6 +21,12 @@ import com.example.usgchallengemobiluygulama.features.feature_detail.data.reposi
 import com.example.usgchallengemobiluygulama.features.feature_detail.domain.repository.LocationDetailRepository
 import com.example.usgchallengemobiluygulama.features.feature_detail.domain.usecase.GetLocationDetailUseCase
 import com.example.usgchallengemobiluygulama.features.feature_detail.presentation.DetailViewModel
+import com.example.usgchallengemobiluygulama.features.feature_location.data.repository.LocationMapRepositoryImpl
+import com.example.usgchallengemobiluygulama.features.feature_location.domain.repository.LocationMapRepository
+import com.example.usgchallengemobiluygulama.features.feature_location.domain.usecase.GetLocationForMapUseCase
+import com.example.usgchallengemobiluygulama.features.feature_location.presentation.LocationMapViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -41,10 +47,14 @@ val appModule = module {
     
     single { get<USGDatabase>().favoriteLocationDao }
     
+    // Location Services
+    single { LocationServices.getFusedLocationProviderClient(androidApplication()) }
+    
     // Repositories
     single<CityRepository> { CityRepositoryImpl(get()) }
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
     single<LocationDetailRepository> { LocationDetailRepositoryImpl(get()) }
+    single<LocationMapRepository> { LocationMapRepositoryImpl(get()) }
     
     // Use Cases
     factory { GetInitialCitiesUseCase(get()) }
@@ -52,6 +62,7 @@ val appModule = module {
     factory { GetFavoriteLocationsUseCase(get()) }
     factory { ToggleFavoriteUseCase(get()) }
     factory { GetLocationDetailUseCase(get()) }
+    factory { GetLocationForMapUseCase(get()) }
     
     // ViewModels
     viewModel { 
@@ -81,6 +92,15 @@ val appModule = module {
             getLocationDetailUseCase = get(),
             toggleFavoriteUseCase = get(),
             favoritesRepository = get(),
+            savedStateHandle = SavedStateHandle(mapOf("locationId" to locationId))
+        )
+    }
+    viewModel { (locationId: Int) ->
+        LocationMapViewModel(
+            navigationManager = get(),
+            getLocationForMapUseCase = get(),
+            fusedLocationClient = get(),
+            context = androidApplication(),
             savedStateHandle = SavedStateHandle(mapOf("locationId" to locationId))
         )
     }

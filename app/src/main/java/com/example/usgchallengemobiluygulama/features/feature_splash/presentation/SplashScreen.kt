@@ -47,6 +47,7 @@ fun SplashScreen(
                         is NetworkError.ConnectionError -> "İnternet bağlantısı hatası"
                         is NetworkError.ServerError -> "Sunucu hatası"
                         is NetworkError.UnknownError -> networkError.message
+                        is NetworkError.NotFound -> TODO()
                     },
                     color = androidx.compose.ui.graphics.Color.Red
                 )

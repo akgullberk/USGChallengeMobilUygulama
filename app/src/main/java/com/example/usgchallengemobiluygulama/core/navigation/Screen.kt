@@ -9,6 +9,11 @@ sealed class Screen(val route: String) {
             return "detail/$locationId"
         }
     }
+    object LocationMap : Screen("location_map/{locationId}") {
+        fun createRoute(locationId: Int): String {
+            return "location_map/$locationId"
+        }
+    }
     
     // Yeni ekranlar için:
     // object Profile : Screen("profile_screen")

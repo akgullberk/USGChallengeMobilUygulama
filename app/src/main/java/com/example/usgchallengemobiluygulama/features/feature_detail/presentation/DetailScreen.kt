@@ -92,15 +92,7 @@ fun DetailScreen(
                         )
                         
                         Button(
-                            onClick = {
-                                // Google Maps'te konumu göster
-                                val uri = Uri.parse("geo:${detail.coordinates.lat},${detail.coordinates.lng}?q=${detail.coordinates.lat},${detail.coordinates.lng}(${detail.name})")
-                                val intent = Intent(Intent.ACTION_VIEW, uri)
-                                intent.setPackage("com.google.android.apps.maps")
-                                if (intent.resolveActivity(context.packageManager) != null) {
-                                    context.startActivity(intent)
-                                }
-                            },
+                            onClick = { viewModel.onAction(DetailAction.ShowOnMap) },
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.usgchallengemobiluygulama.core.domain.util.Result
 import com.example.usgchallengemobiluygulama.core.navigation.NavigationEvent
 import com.example.usgchallengemobiluygulama.core.navigation.NavigationManager
+import com.example.usgchallengemobiluygulama.core.navigation.Screen
 import com.example.usgchallengemobiluygulama.core.presentation.util.BaseViewModel
 import com.example.usgchallengemobiluygulama.features.feature_detail.domain.usecase.GetLocationDetailUseCase
 import com.example.usgchallengemobiluygulama.features.feature_favorites.domain.usecase.ToggleFavoriteUseCase
@@ -85,15 +86,11 @@ class DetailViewModel(
     }
     
     private fun showOnMap() {
-        // Harita gösterme işlemi burada yapılacak
-        // Örneğin: Intent ile Google Maps'e yönlendirme yapılabilir
         viewModelScope.launch {
             state.value.locationDetail?.let { detail ->
-                val lat = detail.coordinates.lat
-                val lng = detail.coordinates.lng
-                // Burada harita uygulamasına yönlendirme yapılabilir
-                // Şimdilik sadece log yazalım
-                println("Haritada göster: $lat, $lng")
+                navigationManager.navigate(
+                    NavigationEvent.NavigateTo(Screen.LocationMap.createRoute(locationId))
+                )
             }
         }
     }

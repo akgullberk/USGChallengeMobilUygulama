@@ -14,6 +14,7 @@ import com.example.usgchallengemobiluygulama.features.feature_home.presentation.
 import com.example.usgchallengemobiluygulama.features.feature_splash.presentation.SplashViewModel
 import com.example.usgchallengemobiluygulama.features.feature_favorites.presentation.FavoritesScreen
 import com.example.usgchallengemobiluygulama.features.feature_detail.presentation.DetailScreen
+import com.example.usgchallengemobiluygulama.features.feature_location.presentation.LocationMapScreen
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,6 +65,15 @@ fun Navigation(navController: NavHostController) {
             )
         ) {
             DetailScreen(it)
+        }
+        
+        composable(
+            route = Screen.LocationMap.route,
+            arguments = listOf(
+                navArgument("locationId") { type = NavType.IntType }
+            )
+        ) {
+            LocationMapScreen(it)
         }
     }
 } 
